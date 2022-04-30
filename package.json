@@ -1,0 +1,29 @@
+{
+  "dependencies": {
+    "@discordjs/builders": "^0.13.0",
+    "@discordjs/rest": "^0.4.1",
+    "discord-api-types": "^0.32.0",
+    "discord.js": "^13.6.0",
+    "dotenv": "^16.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.14.0"
+  },
+  "name": "webcrux_discord_bot",
+  "description": "\" Voila bot coming soon\"",
+  "version": "1.0.0",
+  "main": "home.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karmveerranawat/webcrux_discord_bot.git"
+  },
+  "author": "thewebcrux",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/karmveerranawat/webcrux_discord_bot/issues"
+  },
+  "homepage": "https://github.com/karmveerranawat/webcrux_discord_bot#readme"
+}
