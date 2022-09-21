@@ -1,4 +1,4 @@
 /node_modules
 /.env
 /.eslintrc.json
-/config.json
+config.json
