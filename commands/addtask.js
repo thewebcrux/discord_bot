@@ -6,11 +6,33 @@ const axios = require('axios');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('addtask')
-		.setDescription('Used for adding task by providing required parameters'),
+		.setDescription('Used for adding task by providing required parameters')
+        .addStringOption(option =>
+            option.setName('task')
+                .setDescription('Specify the task which needs to be listed.')
+                .setRequired(true))
+        .addIntegerOption(option =>
+             option.setName('points')
+                .setDescription('Points to be rewarded upon completion')
+                .setRequired(true))
+        .addIntegerOption(option =>
+            option.setName('total_spots')
+                .setDescription('How many people can join this task including task leader ?')
+                .setRequired(true)),
+    
+
 	async execute(interaction) {
         try {
-            axios.post('http://localhost:5000/task')
+            const body = {
+                "task": interaction.options.getString('task'),
+                "points": interaction.options.getInteger('points'),
+                "total_spots": interaction.options.getInteger('total_spots'),
+                "created_by": `<@${interaction.user.id}>`,
+
+            };
+            axios.post('http://localhost:5000/task', body)
             .then((response) => {
+                console.log(response.data)
                 return interaction.reply({ embeds: [embedBuilder(response.data)] });
             }, (error) => {
                 console.log(error);
@@ -28,14 +50,11 @@ module.exports = {
 
 function embedBuilder(raw_data){
     const task_embed = new EmbedBuilder()
-	.setColor(0x0099FF)
-	.setTitle('Task List')
-	.setTimestamp()
-	.setFooter({ text: 'Task display limit (limit 10)', iconURL: 'https://cdn.discordapp.com/icons/976369125171556362/5a41a61c15d5e32cd37796ad4382e085.png?size=1024' });
-
+	.setColor(0x83F683)
+	.setTitle('Task Add')
+	.setTimestamp();
     raw_data.forEach(element => {
-        task_embed.addFields({ name: ""+element.taskID+":  "+element.task,
-                               value: "Points : **"+element.points+"** Spots left : **"+element.spots_left+"** Created by : **"+element.created_by+"**"});
+        task_embed.addFields({ name: "Status : "+element.status, value: element.message});
     });
     return task_embed;
 }
