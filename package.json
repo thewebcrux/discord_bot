@@ -5,7 +5,8 @@
     "axios": "^0.27.2",
     "discord-api-types": "^0.37.10",
     "discord.js": "^14.3.0",
-    "dotenv": "^16.0.0"
+    "dotenv": "^16.0.0",
+    "nodemon": "^2.0.20"
   },
   "devDependencies": {
     "eslint": "^8.14.0"
@@ -15,7 +16,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon index.js"
   },
   "repository": {
     "type": "git",

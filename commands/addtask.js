@@ -1,15 +1,15 @@
 //api call on /task
 const { SlashCommandBuilder } = require('discord.js');
 const { EmbedBuilder } = require('discord.js');
-
 const axios = require('axios');
+
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('tasklist')
-		.setDescription('Lists down all tasks'),
+		.setName('addtask')
+		.setDescription('Used for adding task by providing required parameters'),
 	async execute(interaction) {
         try {
-            axios.get('http://localhost:5000/task')
+            axios.post('http://localhost:5000/task')
             .then((response) => {
                 return interaction.reply({ embeds: [embedBuilder(response.data)] });
             }, (error) => {
@@ -23,6 +23,7 @@ module.exports = {
 		
 	},
 };
+
 
 
 function embedBuilder(raw_data){
