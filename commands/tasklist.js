@@ -1,6 +1,6 @@
 //api call on /task
 const { SlashCommandBuilder } = require('discord.js');
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder , ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 const axios = require('axios');
 module.exports = {
@@ -8,10 +8,17 @@ module.exports = {
 		.setName('tasklist')
 		.setDescription('Lists down all tasks'),
 	async execute(interaction) {
+        const row = new ActionRowBuilder()
+			.addComponents(
+				new ButtonBuilder()
+					.setCustomId('join_task')
+					.setLabel('Join Task')
+					.setStyle(ButtonStyle.Primary),
+		);
         try {
             axios.get('http://localhost:5000/task')
             .then((response) => {
-                return interaction.reply({ embeds: [embedBuilder(response.data)] });
+                return interaction.reply({ embeds: [embedBuilder(response.data)], components: [row] });
             }, (error) => {
                 console.log(error);
                 return interaction.reply('Error');
