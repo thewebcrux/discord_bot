@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const {ActionRowBuilder, SelectMenuBuilder } = require('discord.js');
+const {ActionRowBuilder, SelectMenuBuilder} = require('discord.js');
 const axios = require('axios');
 
 module.exports = {
@@ -25,12 +25,25 @@ module.exports = {
         }
 
         //selectmenu event handler
-        const filter = i => i.customId === 'join_task' && i.user.id === interaction.user.id;
+
+        const filter = i => {
+            return i.user.id === interaction.user.id && i.customId === 'join_task';
+        };
+
         const collector = interaction.channel.createMessageComponentCollector({ filter, time: 30000 });
         collector.on('collect', async i => {
-            await i.reply({ content: `${i.values} was chosen.. `, components: [] });
+            //close collector 
+            collector.stop();
+            //Joining Starts
+            await i.deferReply();
+            
+            await i.editReply({ content: `${i.values} was chosen.. `, components: [] });
         });
-        collector.on('end', collected => console.log(`Collected ${collected.size} items`));
+        collector.on('end', collected => {
+            console.log(`Collected ${collected.size} items`);
+            interaction.editReply({content: "Interaction Closed", components: []});
+        });
+        
 	},
 };
 
