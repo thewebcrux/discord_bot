@@ -17,38 +17,72 @@ module.exports = {
 		const id = interaction.user.id;
 		const input_token = interaction.options.getString("token");
 		const email = interaction.options.getString("email");
-		const {status,token} = await getUserVerificationStatus(id, email);
-		
+		const val = await output(id, email).then((res)=>{return res});
+		console.log(val)
+		// const {status,token, mssg} = await output(id,email);
+		// if(status == "yes") return interaction.editReply("Already Verified");
+		// if(status == "no_email_found"){
+		// 	return interaction.editReply("You are a new user , kindly provide Email ID nex time !");
+		// }
+		// if(status == "no"){
+		// 	//check for token
+		// 	if(!input_token) return interaction.editReply(mssg+ "\n Provide token next time");
+		// 	if(input_token == token){
+		// 		return interaction.editReply("Verified");
+		// 	} else {
+		// 		return interaction.editReply("Token Mismatch");
+		// 	}
+		// }
 		//if verified finish
 	},
 };
 
-function getUserVerificationStatus(id, email){
-	let status ="",token = "";
-	let mssg = "";
+
+
+function output(id,email){
 	try{
-		axios.get('http://localhost:5000/user/'+id)
-		.then((response) => {
-			if((response.data).length == 0){
-				//if no user in records add user and then send data
-				if(!email) return;
-				mssg="System Identified you as new member and will add you to the database.\n Mail with a token will be sent \n";
-				status="no";
-				token= addUser(id, email);
-			} else {
-				//if user found send data
-				status = response.data.verified;
-				token = response.data.verificationToken;
-			} 
-		}, (error) => {
-			console.log(error);
+		return axios.get('http://localhost:5000/user/'+id)
+		.then(async (response) => {
+			let status ="no_email_found",token;
+			let mssg;
+			return new Promise((res,rej) => {
+				if((response.data).length == 0){
+					//if no user in records add user and then send data
+					if(!email) return;
+					mssg="System Identified you as new member and will add you to the database.\n Mail with a token will be sent \n";
+					status="no";
+					token= addUser(id, email);
+				} else {
+					//if user found send data
+					res({
+						status : response.data[0].verified,
+						//console.log(status)
+						token : response.data[0].verificationToken,
+					});
+					
+				}
+				
+			})
+			// if((response.data).length == 0){
+			// 	//if no user in records add user and then send data
+			// 	if(!email) return;
+			// 	mssg="System Identified you as new member and will add you to the database.\n Mail with a token will be sent \n";
+			// 	status="no";
+			// 	token= await addUser(id, email);
+			// } else {
+			// 	//if user found send data
+			// 	status = response.data[0].verified;
+			// 	//console.log(status)
+			// 	token = response.data[0].verificationToken;
+			// } 
+			//return {"status": status, "token": token, "message": mssg};
+			//console.log(value);
 		});
 	} catch (error) {
 		console.log(error);
 	}
-	return {"status": status, "token": token, "message": mssg};
-}	
-
+}
+	
 function addUser(id, email){
 	const token = tokenGenerator(id);
 	try {
