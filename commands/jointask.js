@@ -53,13 +53,20 @@ module.exports = {
 function selectMenuCreator(raw_data){
 
     const optionArray = [];
-    let task_leader;
+    let status;
+    const task_leader = (position) => {
+        if(position == 0){
+            return "EMPTY";
+        } else {
+            return "FILLED"
+        }
+    }
     // adding option in select menu        
     raw_data.forEach(element => {
-        task_leader = element.task_leader.toString()
+        status = task_leader(element.task_leader);
         optionArray.push({
             label: element.task,
-            description: `Points: ${element.points}   Spots Left: ${element.spots_left}  \n Total Spots: ${element.total_spots}   Task Leader: <@${task_leader}>`,
+            description: `Points : ${element.points} ,   Spots Left : ${element.spots_left} ,  Total Spots : ${element.total_spots} ,   TL Spot : ${status}`,
             value: element.taskID+"",
         })
     });      
