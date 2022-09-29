@@ -27,7 +27,7 @@ module.exports = {
                 "task": interaction.options.getString('task'),
                 "points": interaction.options.getInteger('points'),
                 "total_spots": interaction.options.getInteger('total_spots'),
-                "created_by": `<@${interaction.user.id}>`,
+                "created_by": ""+`${interaction.user.id}`,
             };
             axios.post('http://localhost:5000/task', body)
             .then((response) => {

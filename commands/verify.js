@@ -103,7 +103,7 @@ function addUser(id, email){
 		const token = tokenGenerator(id);
 		try {
 			const body = {
-				"id": id,
+				"id": ""+id,
 				"token": token,
 				"email": email,
 			};
