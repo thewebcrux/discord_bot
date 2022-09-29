@@ -25,7 +25,6 @@ module.exports = {
         }
 
         //selectmenu event handler
-
         const filter = i => {
             return i.user.id === interaction.user.id && i.customId === 'join_task';
         };
@@ -37,11 +36,14 @@ module.exports = {
             //Joining Starts
             await i.deferReply();
             
+            //fecth specific task >> check TL post >> 
+            //fetch specific user >>check eliblity for TL>>
+            //
             await i.editReply({ content: `${i.values} was chosen.. `, components: [] });
         });
         collector.on('end', collected => {
             console.log(`Collected ${collected.size} items`);
-            interaction.editReply({content: "Interaction Closed", components: []});
+            interaction.deleteReply();
         });
         
 	},
@@ -51,11 +53,13 @@ module.exports = {
 function selectMenuCreator(raw_data){
 
     const optionArray = [];
+    let task_leader;
     // adding option in select menu        
     raw_data.forEach(element => {
+        task_leader = element.task_leader.toString()
         optionArray.push({
             label: element.task,
-            description: `Points: ${element.points}   Spots Left: ${element.spots_left}   Total Spots: ${element.total_spots}`,
+            description: `Points: ${element.points}   Spots Left: ${element.spots_left}  \n Total Spots: ${element.total_spots}   Task Leader: <@${task_leader}>`,
             value: element.taskID+"",
         })
     });      

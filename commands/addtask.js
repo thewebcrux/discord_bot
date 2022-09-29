@@ -18,7 +18,11 @@ module.exports = {
         .addIntegerOption(option =>
             option.setName('total_spots')
                 .setDescription('How many people can join this task including task leader ?')
-                .setRequired(true)),
+                .setRequired(true))
+        .addStringOption(option =>
+            option.setName('channel_name')
+                .setDescription('Name of channel where task related discussions will be held')
+                .setRequired(true)),        
     
 
 	async execute(interaction) {
@@ -27,12 +31,21 @@ module.exports = {
                 "task": interaction.options.getString('task'),
                 "points": interaction.options.getInteger('points'),
                 "total_spots": interaction.options.getInteger('total_spots'),
-                "created_by": ""+`${interaction.user.id}`,
+                "created_by": interaction.user.id,
             };
             axios.post('http://localhost:5000/task', body)
-            .then((response) => {
+            .then(async (response) => {
                 console.log(response.data)
-                return interaction.reply({ embeds: [embedBuilder(response.data)] });
+                await interaction.reply({ embeds: [embedBuilder(response.data)] });
+                // Create a new text channel
+                interaction.guild.channels.create({ 
+                    name: interaction.options.getString('channel_name'), 
+                    reason: body.task,
+                    parent: "1024940103040245811"
+                })
+                .then((output) => {console.log(output);return interaction.followUp(`Channel created for the task : ${output.toString()}`)})
+                .catch(console.error);
+
             }, (error) => {
                 console.log(error);
                 return interaction.reply('Error');

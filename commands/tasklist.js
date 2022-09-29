@@ -50,7 +50,7 @@ function embedBuilder(raw_data){
 
     raw_data.forEach(element => {
         task_embed.addFields({ name: ""+element.taskID+":  "+element.task,
-                               value: "Points : **"+element.points+"** Spots left : **"+element.spots_left+"** Created by : **"+element.created_by+"**"});
+                               value: "Points : **"+element.points+"** Spots left : **"+element.spots_left+"** Created by : **<@"+element.created_by+">**"});
     });
     return task_embed;
 }
