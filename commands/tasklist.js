@@ -8,6 +8,7 @@ module.exports = {
 		.setName('tasklist')
 		.setDescription('Lists down all tasks'),
 	async execute(interaction) {
+        await interaction.deferReply();
         const row = new ActionRowBuilder()
 			.addComponents(
 				new ButtonBuilder()
@@ -18,15 +19,23 @@ module.exports = {
         try {
             axios.get('http://localhost:5000/task')
             .then((response) => {
-                return interaction.reply({ embeds: [embedBuilder(response.data)], components: [row] });
+                return interaction.editReply({ embeds: [embedBuilder(response.data)], components: [row] });
             }, (error) => {
                 console.log(error);
-                return interaction.reply('Error');
+                return interaction.editReply('Error');
             });
         } catch (error) {
             console.log(error);
-            interaction.reply("Error");
+            return interaction.editReply("Error");
         }
+
+        //button handling
+        const filter = i => i.customId === 'join_task' && i.user.id === interaction.user.id;
+        const collector = interaction.channel.createMessageComponentCollector({ filter, time: 15000 });
+        collector.on('collect', async i => {
+            await i.reply({ content: 'A button was clicked!', components: [] });
+        });
+        collector.on('end', collected => console.log(`Collected ${collected.size} items`));
 		
 	},
 };
