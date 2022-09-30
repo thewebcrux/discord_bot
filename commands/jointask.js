@@ -9,12 +9,15 @@ module.exports = {
 	async execute(interaction) {
 		await interaction.deferReply();
 
+        let taskCache;
+        let selectMenu;
         //api fetch all data
         try {
             axios.get('http://localhost:5000/task')
             .then((response) => {
                 //send api data to slect menu builder function and returns its menu to interaction reply
-                return interaction.editReply({ components: [selectMenuCreator(response.data)] });
+                [selectMenu,taskCache] = selectMenuCreator(response.data);
+                return interaction.editReply({ components: [selectMenu] });
             }, (error) => {
                 console.log(error);
                 return interaction.editReply('Error');
@@ -35,11 +38,25 @@ module.exports = {
             collector.stop();
             //Joining Starts
             await i.deferReply();
-            
-            //fecth specific task >> check TL post >> 
-            //fetch specific user >>check eliblity for TL>>
-            //
-            await i.editReply({ content: `${i.values} was chosen.. `, components: [] });
+            try {
+                //fecth specific task >> check TL post >>
+                const taskID = i.values;
+                const tl_status = taskCache.get(taskID+"");
+                const userID = i.user.id
+                
+                //fetch specific user >>check eliblity for TL>>
+                let userData;
+                await fetchUserData(userID)
+                        .then((response)=>{userData = response})
+                        .catch((err) => {throw err});
+                
+
+                //send final reply
+                return i.editReply(`TL status of task ID : ${taskID} is ${tl_status}`)
+            } catch (error) {
+                console.log(error)
+                i.editReply("Error Occured : "+error);
+            }
         });
         collector.on('end', collected => {
             console.log(`Collected ${collected.size} items`);
@@ -53,6 +70,7 @@ module.exports = {
 function selectMenuCreator(raw_data){
 
     const optionArray = [];
+    const taskCache = new Map();
     let status;
     const task_leader = (position) => {
         if(position == 0){
@@ -64,13 +82,14 @@ function selectMenuCreator(raw_data){
     // adding option in select menu        
     raw_data.forEach(element => {
         status = task_leader(element.task_leader);
+        taskCache.set(element.taskID+"", status);
         optionArray.push({
             label: element.task,
             description: `Points : ${element.points} ,   Spots Left : ${element.spots_left} ,  Total Spots : ${element.total_spots} ,   TL Spot : ${status}`,
             value: element.taskID+"",
         })
     });      
-    console.log(optionArray)
+    //console.log(optionArray)
     //select menu init
     const row = new ActionRowBuilder()
 			.addComponents(
@@ -80,5 +99,23 @@ function selectMenuCreator(raw_data){
                 .setOptions(optionArray)
             );
 
-    return row;
+    return [row, taskCache];
+}
+
+function fetchUserData(userID){
+    return new Promise((resolve,reject)=>{
+        try {
+            axios.get('http://localhost:5000/user/'+userID)
+            .then((response) => {
+                if((response.data).length == 0) reject("You are a new user, use ```/verify```")
+                resolve(response.data[0])   
+            }, (error) => {
+                console.log(error);
+                reject(error)
+            });
+        } catch (error) {
+            console.log(error);
+            reject(error)
+        }
+    })
 }
