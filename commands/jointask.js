@@ -1,5 +1,5 @@
-const { SlashCommandBuilder } = require('discord.js');
-const {ActionRowBuilder, SelectMenuBuilder} = require('discord.js');
+const { SlashCommandBuilder, ButtonStyle } = require('discord.js');
+const {ActionRowBuilder, SelectMenuBuilder, ButtonBuilder} = require('discord.js');
 const axios = require('axios');
 
 module.exports = {
@@ -34,8 +34,9 @@ module.exports = {
 
         const collector = interaction.channel.createMessageComponentCollector({ filter, time: 30000 });
         collector.on('collect', async i => {
-            //close collector 
-            collector.stop();
+             //close collector 
+             collector.stop();
+             
             //Joining Starts
             await i.deferReply();
             try {
@@ -50,9 +51,19 @@ module.exports = {
                         .then((response)=>{userData = response})
                         .catch((err) => {throw err});
                 
+                if(tl_status == "EMPTY"){
+                    if(userData.tasks_finished > 3){
+                        //ask for tl post
+                        const buttons = choice();
+                        i.editReply({ content: "Do you want to be task leader for this task ?", components: [buttons] })
+                    }
+                } else {
+                    interaction.deleteReply();
+                    i.editReply("no task leader for you")
+                }
 
                 //send final reply
-                return i.editReply(`TL status of task ID : ${taskID} is ${tl_status}`)
+                //return i.editReply(`TL status of task ID : ${taskID} is ${tl_status}`)
             } catch (error) {
                 console.log(error)
                 i.editReply("Error Occured : "+error);
@@ -60,7 +71,6 @@ module.exports = {
         });
         collector.on('end', collected => {
             console.log(`Collected ${collected.size} items`);
-            interaction.deleteReply();
         });
         
 	},
@@ -118,4 +128,21 @@ function fetchUserData(userID){
             reject(error)
         }
     })
+}
+
+
+function choice(){
+    const yesButton = new ButtonBuilder()
+                            .setCustomId('yes')
+                            .setLabel('YES')
+                            .setStyle(ButtonStyle.Primary);
+    const noButton = new ButtonBuilder()
+                            .setCustomId('no')
+                            .setLabel('NO')
+                            .setStyle(ButtonStyle.Primary);                        
+    const row = new ActionRowBuilder()
+			.addComponents(
+                [yesButton,noButton]
+            );
+    return row;        
 }
