@@ -36,7 +36,7 @@ module.exports = {
         collector.on('collect', async i => {
              //close collector 
              collector.stop();
-             
+
             //Joining Starts
             await i.deferReply();
             try {
@@ -50,27 +50,50 @@ module.exports = {
                 await fetchUserData(userID)
                         .then((response)=>{userData = response})
                         .catch((err) => {throw err});
-                
-                if(tl_status == "EMPTY"){
-                    if(userData.tasks_finished > 3){
-                        //ask for tl post
-                        const buttons = choice();
-                        i.editReply({ content: "Do you want to be task leader for this task ?", components: [buttons] })
-                    }
-                } else {
-                    interaction.deleteReply();
-                    i.editReply("no task leader for you")
+
+                interaction.deleteReply();
+    
+                const userChoiceSelector = ()=> {
+                    return new Promise((resolve,reject) =>{
+                        if(tl_status == "EMPTY"){
+                            if(userData.tasks_finished > 3){
+                                //ask for tl post
+                                const buttons = choice();
+                                i.editReply({ content: "Do you want to be task leader for this task ?", components: [buttons] })
+        
+                                //button handling
+                                const filter = buttonInteraction => (buttonInteraction.customId === 'yes'|| buttonInteraction.customId === 'no') && buttonInteraction.user.id === i.user.id;
+                                const collector = i.channel.createMessageComponentCollector({ filter, time: 7000 });
+                                collector.on('collect', async buttonInteraction => {
+                                    collector.stop()
+                                    await buttonInteraction.deferReply();
+                                    const userChoice = buttonInteraction.customId;
+                                    resolve([userChoice,buttonInteraction]);
+                                });
+                                collector.on('end', collected => {
+                                    console.log(`Collected ${collected.size} button items`); 
+                                    //return i.editReply({content:"Command Completed", components: []})
+                                });
+        
+                            } else {resolve(["no",i]);}
+                        } else {resolve(["no",i]);}
+                    })
                 }
+                let selectedChoice;
+                let freshInteraction;
+                await userChoiceSelector().then((res)=>{[selectedChoice,freshInteraction] = res}).catch((err)=>{throw err});
+
+                //DB CALLS
 
                 //send final reply
-                //return i.editReply(`TL status of task ID : ${taskID} is ${tl_status}`)
+                return freshInteraction.editReply(`TL status of task ID : ${taskID} is ${tl_status} and you chose ${selectedChoice}`)
             } catch (error) {
                 console.log(error)
-                i.editReply("Error Occured : "+error);
+                return i.editReply("Error Occured : "+error);
             }
         });
         collector.on('end', collected => {
-            console.log(`Collected ${collected.size} items`);
+            console.log(`Collected ${collected.size} selectmenu items`);
         });
         
 	},
