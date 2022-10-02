@@ -88,13 +88,23 @@ module.exports = {
                 if(selectedChoice == "yes"){
                     addTL(taskID,userID).then(()=>{
                         //update no_of_times_task_leader
+                        updater("user","no_of_times_task_leader",'+1',userID).then(()=>{ 
+                            return freshInteraction.followUp("You have been assigned task leader !")
+                            }).catch((err)=> {throw err})
                     }).catch((err)=>{throw err})
                 }
-                //update task_joined
-                //update spots left
-                //update taskenrolled
-                //send final reply
-                return freshInteraction.editReply(`TL status of task ID : ${taskID} is ${tl_status} and you chose ${selectedChoice}`)
+
+                //updating tasks_enrolled
+                await updater("user","tasks_enrolled",'+1',userID).then(()=>{
+                    //updating spots_left
+                    updater("task","spots_left",'-1',taskID).then(()=>{
+                        //call merger
+                        //give acess to channel
+                        //send final reply
+                        return freshInteraction.editReply(`Congrats reached till here`)
+                    }).catch((err)=>{throw err})
+                }).catch((err)=> {throw err})
+
             } catch (error) {
                 console.log(error)
                 return i.editReply("Error Occured : "+error);
@@ -122,7 +132,7 @@ function selectMenuCreator(raw_data){
     }
     // adding option in select menu        
     raw_data.forEach(element => {
-        if(element.total_spots == element.spots_left) return
+        if(element.spots_left == 0) return
         status = task_leader(element.task_leader);
         taskCache.set(element.taskID+"", status);
         optionArray.push({
@@ -196,4 +206,47 @@ function addTL(taskID,userID){
 			rej(error)
 		}
 	})
+}
+
+function updater(table,column,exp,id){
+    return new Promise((res,rej) => {
+		try {
+			const body = {
+				"column": column,
+			};
+			axios.put(`http://localhost:5000/${table}/${id}/${exp}`,body)
+			.then((response) => {
+				res(response.data[0].message)
+			}, (error) => {
+				rej(error)
+			});
+		} catch (error) {
+			console.log(error);
+			rej(error)
+		}
+	})
+}
+
+function addToMerger(taskID, userID){
+    return new Promise((res,rej) => {
+		try {
+			const body = {
+				"taskID": "column",
+				"userID": "value",
+			};
+			axios.post(`http://localhost:5000/merger`,body)
+			.then((response) => {
+				res(response.data[0].message)
+			}, (error) => {
+				rej(error)
+			});
+		} catch (error) {
+			console.log(error);
+			rej(error)
+		}
+	})
+}
+
+function checkAlreadyEnrolled(){
+    
 }
