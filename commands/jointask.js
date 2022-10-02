@@ -84,7 +84,15 @@ module.exports = {
                 await userChoiceSelector().then((res)=>{[selectedChoice,freshInteraction] = res}).catch((err)=>{throw err});
 
                 //DB CALLS
-
+                //update tl based on choice
+                if(selectedChoice == "yes"){
+                    addTL(taskID,userID).then(()=>{
+                        //update no_of_times_task_leader
+                    }).catch((err)=>{throw err})
+                }
+                //update task_joined
+                //update spots left
+                //update taskenrolled
                 //send final reply
                 return freshInteraction.editReply(`TL status of task ID : ${taskID} is ${tl_status} and you chose ${selectedChoice}`)
             } catch (error) {
@@ -114,6 +122,7 @@ function selectMenuCreator(raw_data){
     }
     // adding option in select menu        
     raw_data.forEach(element => {
+        if(element.total_spots == element.spots_left) return
         status = task_leader(element.task_leader);
         taskCache.set(element.taskID+"", status);
         optionArray.push({
@@ -153,7 +162,6 @@ function fetchUserData(userID){
     })
 }
 
-
 function choice(){
     const yesButton = new ButtonBuilder()
                             .setCustomId('yes')
@@ -168,4 +176,24 @@ function choice(){
                 [yesButton,noButton]
             );
     return row;        
+}
+
+function addTL(taskID,userID){
+    return new Promise((res,rej) => {
+		try {
+			const body = {
+				"column": "task_leader",
+				"value": userID,
+			};
+			axios.put('http://localhost:5000/task/'+taskID,body)
+			.then((response) => {
+				res(response.data[0].message)
+			}, (error) => {
+				rej(error)
+			});
+		} catch (error) {
+			console.log(error);
+			rej(error)
+		}
+	})
 }
