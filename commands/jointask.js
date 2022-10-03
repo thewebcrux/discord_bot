@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ButtonStyle } = require('discord.js');
+const { SlashCommandBuilder, ButtonStyle,PermissionsBitField } = require('discord.js');
 const {ActionRowBuilder, SelectMenuBuilder, ButtonBuilder} = require('discord.js');
 const axios = require('axios');
 
@@ -42,7 +42,7 @@ module.exports = {
             try {
                 //fecth specific task >> check TL post >>
                 const taskID = i.values;
-                const tl_status = taskCache.get(taskID+"");
+                const [tl_status,channelID] = taskCache.get(taskID+"");
                 const userID = i.user.id
                 
                 //fetch specific user >>check eliblity for TL>>
@@ -99,9 +99,20 @@ module.exports = {
                     //updating spots_left
                     updater("task","spots_left",'-1',taskID).then(()=>{
                         //call merger
-                        //give acess to channel
-                        //send final reply
-                        return freshInteraction.editReply(`Congrats reached till here`)
+                        addToMerger(taskID,userID,channelID).then(()=>{
+                             //edit add user to channel
+                             interaction.guild.channels.edit(channelID, { 
+                                permissionOverwrites: [
+                                    { 
+                                        id: userID, 
+                                        type: 1, 
+                                        allow: PermissionsBitField.All,
+                                    },
+                                ],
+                            }).then(()=>{
+                                return freshInteraction.followUp(`You have been added to channel here : <#${channelID}>`)
+                            }).catch((err)=> {throw err})
+                        }).catch((err)=>{throw err})
                     }).catch((err)=>{throw err})
                 }).catch((err)=> {throw err})
 
@@ -134,7 +145,7 @@ function selectMenuCreator(raw_data){
     raw_data.forEach(element => {
         if(element.spots_left == 0) return
         status = task_leader(element.task_leader);
-        taskCache.set(element.taskID+"", status);
+        taskCache.set(element.taskID+"", [status,element.channelID]);
         optionArray.push({
             label: element.task,
             description: `Points : ${element.points} ,   Spots Left : ${element.spots_left} ,  Total Spots : ${element.total_spots} ,   TL Spot : ${status}`,
@@ -227,12 +238,13 @@ function updater(table,column,exp,id){
 	})
 }
 
-function addToMerger(taskID, userID){
+function addToMerger(taskID, userID, channelID){
     return new Promise((res,rej) => {
 		try {
 			const body = {
-				"taskID": "column",
-				"userID": "value",
+				"taskID": taskID,
+				"userID": userID,
+                "channelID": channelID,
 			};
 			axios.post(`http://localhost:5000/merger`,body)
 			.then((response) => {
@@ -248,5 +260,5 @@ function addToMerger(taskID, userID){
 }
 
 function checkAlreadyEnrolled(){
-    
+
 }
