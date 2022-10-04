@@ -33,7 +33,7 @@ module.exports = {
             await interaction.guild.channels.create({ 
                 name: interaction.options.getString('channel_name'), 
                 reason: interaction.options.getString('task'),
-                parent: "1024940103040245811"
+                parent: "1026752094675411014"
             })
             .then((output) => {channelID = output.id;return interaction.followUp(`Channel created for the task : <#${output.id}>`)})
             .catch(console.error);
