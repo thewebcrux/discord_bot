@@ -4,7 +4,11 @@ const axios = require('axios');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('profile')
-		.setDescription('Shows your profile stats'),
+		.setDescription('Shows your profile stats')
+        .addStringOption(option =>
+            option.setName('email')
+                .setDescription('Update your email or get a new token')
+                .setRequired(false)),
 	async execute(interaction) {
         await interaction.deferReply();
         

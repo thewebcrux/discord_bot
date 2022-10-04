@@ -30,7 +30,7 @@ module.exports = {
         }
 
         //button handling
-        const filter = i => i.customId === 'join_task' && i.user.id === interaction.user.id;
+        const filter = i => i.customId === 'test_task' && i.user.id === interaction.user.id;
         const collector = interaction.channel.createMessageComponentCollector({ filter, time: 15000 });
         collector.on('collect', async i => {
             await i.reply({ content: 'A button was clicked!', components: [] });
@@ -50,7 +50,7 @@ function embedBuilder(raw_data){
 
     raw_data.forEach(element => {
         task_embed.addFields({ name: ""+element.taskID+":  "+element.task,
-                               value: "Points : **"+element.points+"** Spots left : **"+element.spots_left+"** Created by : **"+element.created_by+"**"});
+                               value: "Points : **"+element.points+"** Spots left : **"+element.spots_left+"** Created by : **<@"+element.created_by+">**"});
     });
     return task_embed;
 }

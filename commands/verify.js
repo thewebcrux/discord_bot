@@ -132,7 +132,11 @@ function tokenGenerator(id){
 function updateVerificationStatus(id){
 	return new Promise((res,rej) => {
 		try {
-			axios.put('http://localhost:5000/user/'+id)
+			const body = {
+				"column": "verified",
+				"value": "yes",
+			};
+			axios.put('http://localhost:5000/user/'+id,body)
 			.then((response) => {
 				res(response.data[0].message)
 			}, (error) => {
