@@ -53,13 +53,13 @@ module.exports = {
                         
                         
                         interaction.deleteReply();        
-                        
+
                         //chekc user verification status
                         if(userData.verified == "no") return i.editReply("Kindly Verify yourself 1st !");
 
                         //ask user for a choice if they wanna be a task leader if status of tl is empty
                         const userChoiceSelector = ()=> {
-                            return new Promise((resolve,reject) =>{
+                            return new Promise((resolve) =>{
                                 if(tl_status == "EMPTY"){
                                     if(userData.tasks_finished > 3){
                                         //ask for tl post
