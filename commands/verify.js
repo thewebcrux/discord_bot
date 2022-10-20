@@ -34,7 +34,15 @@ module.exports = {
 				if(input_token == token){
 					//update verificationStatus
 					return await updateVerificationStatus(id)
-					.then((response) => interaction.editReply("Result : "+response))
+					.then((response) => {
+						//give role of contributor
+						interaction.guild.members.addRole({
+							"user": id,
+							"role": "998183383203057725"
+						}).then(()=>{
+							interaction.editReply("Result : "+response)
+						}).catch((err) => interaction.editReply("error : "+err))
+					})
 					.catch((err) => interaction.editReply("error : "+err))
 				} else {
 					return interaction.editReply("Token Mismatch");

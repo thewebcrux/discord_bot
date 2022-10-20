@@ -50,12 +50,16 @@ module.exports = {
                         await fetchUserData(userID)
                                 .then((response)=>{userData = response})
                                 .catch((err) => {throw err});
-
-                        interaction.deleteReply();
                         
+                        
+                        interaction.deleteReply();        
+
+                        //chekc user verification status
+                        if(userData.verified == "no") return i.editReply("Kindly Verify yourself 1st !");
+
                         //ask user for a choice if they wanna be a task leader if status of tl is empty
                         const userChoiceSelector = ()=> {
-                            return new Promise((resolve,reject) =>{
+                            return new Promise((resolve) =>{
                                 if(tl_status == "EMPTY"){
                                     if(userData.tasks_finished > 3){
                                         //ask for tl post
@@ -114,10 +118,22 @@ module.exports = {
                                         ],
                                     }).then(()=>{
                                         return freshInteraction.followUp(`You have been added to channel here : <#${channelID}>`)
-                                    }).catch((err)=> {throw err})
-                                }).catch((err)=>{throw err})
-                            }).catch((err)=>{throw err})
-                        }).catch((err)=> {throw err})
+                                    }).catch((err)=> {
+                                        console.log(err);
+                                        freshInteraction.editReply("Error Occured 101");
+                                    })
+                                }).catch((err)=>{
+                                    console.log(err);
+                                    freshInteraction.editReply("Error Occured 102");
+                                })
+                            }).catch((err)=>{
+                                console.log(err);
+                                freshInteraction.editReply("Error Occured 103");
+                            })
+                        }).catch((err)=> {
+                            console.log(err);
+                            freshInteraction.editReply("Error Occured 104");
+                        })
 
                     } catch (error) {
                         console.log(error)
