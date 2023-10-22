@@ -1,0 +1,57 @@
+#include <stdio.h>
+int main()
+{
+    int age,time;
+    printf("Enter your age and time : ");
+    scanf("%d %d",&age,&time);
+    if (age>=1 && age<=13 && age>=60)
+    {
+        if (time>=8 && time<=12) 
+        {
+            printf("Price = Rs.150\n");
+        }
+        else if (time>=13 && time<=20) 
+        {
+            printf("Price = Rs.250\n");
+        }
+        else if (time>=21 && time<=24) 
+        {
+            printf("Price = Rs.200\n");
+        }
+    }
+    else if (age>=14 && age<=21)
+    {
+        if (time>=8 && time<=12) 
+        {
+            printf("Price = Rs.250\n");
+        }
+        else if (time>=13 && time<=20) 
+        {
+            printf("Price = Rs.300\n");
+        }
+        else if (time>=21 && time<=24) 
+        {
+            printf("Price = Rs.250\n");
+        }
+    }
+    else if (age>=22 && age<=59)
+    {
+        if (time>=8 && time<=12) 
+        {
+            printf("Price = Rs.250\n");
+        }
+        else if (time>=13 && time<=20) 
+        {
+            printf("Price = Rs.400\n");
+        }
+        else if (time>=21 && time<=24) 
+        {
+            printf("Price = Rs.300\n");
+        }
+    }
+    else 
+    {
+        printf("Invalid age or time");
+    }
+    return 0;
+}
