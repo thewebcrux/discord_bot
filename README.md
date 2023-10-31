@@ -2,17 +2,17 @@
 **Overview:**
 Webcrux is a blockchain community bot designed to enhance community engagement, decentralized learning, and protocol voting in the Dehradun blockchain community. This documentation provides a comprehensive guide to deploying, configuring, and using the Webcrux bot.
 
-Features:
+**Features:**
 
 Decentralized Learning: Webcrux facilitates decentralized learning by sharing educational resources, conducting web3 workshops, and enabling members to collaborate on blockchain-related projects.
 
-Protocol Voting: Community members can vote on specific blockchain protocols, ensuring collective decision-making.
+**Protocol Voting:** Community members can vote on specific blockchain protocols, ensuring collective decision-making.
 
 Member Progress Tracking: The bot tracks individual member's contributions and progress within the community, fostering accountability and recognition.
 
-Live Quizzes: Host live quizzes and blockchain-related challenges to engage the community.
+**Live Quizzes:** Host live quizzes and blockchain-related challenges to engage the community.
 
-Automated Responses: Configure the bot to provide automatic responses and replies to common queries and discussions, making community management more efficient.
+**Automated Responses:** Configure the bot to provide automatic responses and replies to common queries and discussions, making community management more efficient.
 
 Getting Started:
 
