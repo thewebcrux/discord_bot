@@ -31,7 +31,8 @@ We welcome contributions from the open-source community. If you'd like to enhanc
 Support and Feedback:
 For questions, support, or feedback, please reach out to the Webcrux community at contact@email.com.
 
-License:
-This project is open source and is available under the MIT License.
+> [!IMPORTANT]
+>License:
+>This project is open source and is available under the MIT License.
 
 Webcrux is a powerful tool to foster community engagement in the Dehradun blockchain space. With its educational resources, voting capabilities, progress tracking, live quizzes, and automated responses, it plays a pivotal role in the decentralization and learning of web3 technologies.
