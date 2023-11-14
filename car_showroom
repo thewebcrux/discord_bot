@@ -1,0 +1,135 @@
+#include <stdio.h>
+#include<stdlib.h>
+
+int main() 
+{
+    int number, num, response, res;
+    printf("Welcome to our showroom.    \n");
+    printf("Want to see cars. if yes than 1 else no then 0: ");
+    scanf("%d", &res);
+    start:
+    if(res == 0) {
+        goto start;
+    }
+    else if(res == 1) {
+    printf("Which car do you want to see:- \n");
+    printf("1: Expensive\n");
+    printf("2: Mid Range\n");
+    printf("3: Affordable\n");
+    printf("Enter the number: ");
+    scanf("%d", &number);
+    printf("***************************");
+    switch (number)
+    {
+        case 1:
+        printf("\nOptions available are:- \n");
+        printf("1.Phantom Series||\n2.Ghost V-12\n3.Mercedes Benz E-class Elite E220d(Diesel)\n");
+        printf("***************************************************************\n");
+        printf("Enter the car number for which you want to see specification: ");
+        scanf("%d", &num);
+        switch(num) {
+            case 1:
+            printf("Specification is as follows:- \n1] Seating capacity- 5 person\n2] Fuel tank- 100l\n3]Ground clearence- 164mm");
+            break;
+            case 2:
+            printf("Specification is as follows:- \n1] Seating capacity- 5 person\n2] Fuel tank- 83l\n3]Ground clearence- 148mm");
+            break;
+            case 3:
+            printf("Specification is as follows:- \n1] Seating capacity- 5 person\n2] Fuel tank- 80l\n3]Ground clearence- 114mm");
+            break;
+            case 4:
+            printf("Go back\n");
+            goto start;
+        }
+        break;
+        case 2:
+        printf("\n Options available are:- \n1]Tata Tiagor\n2]Honda cityZ-X\n3]Hyundai Exter\n");
+        printf("***************************************************************\n");
+        printf("Enter the car number for which you want to see specification: ");
+        scanf("%d", &num);
+        switch (num)
+        {
+            case 1:
+            printf("Specifications are as follows:-\nEngine displacement: 1197cc\nMileage: 19.27kmpl, 26.49 km/kg\nSeating capacity: 5\nPrice: Rs. 6 lakh to Rs. 7.7 lakh");
+            break;
+            case 2:
+            printf("Specifications are as follows:-\nEngine displacement: 1498 cc\nMileage: 17.8 kmpl and 18.4 kmpl\nSeating capacity: 5\nPrice: Rs. 11.50 lakh to Rs. 16 lakh");
+            case 3:
+            printf("Specifications are as follows:-\nEngine displacement: 1600cc\nMileage: 14.8kmpl to 17.3 kmpl\nSeating capacity: 5\nPrice: Rs. 18 lakh to Rs. 21 lakh");
+            break;
+        }
+        break;
+    case 3:
+    printf("\n Options available are:- \n1]Maruti Suzuki Brezza LXI\n2]Mahindra XUV300W4 Diesel\n3]Tata Nexon Pure diesel\n");
+        printf("***************************************************************\n");
+        printf("Enter the car number for which you want to see specification: ");
+        scanf("%d", &num);
+        switch(num) 
+        {
+            case 1:
+            printf("Specifications are:-\n1]Mileage: 19.8 to 20.15 kmpl\n2]Engine Displacement:  1462 cc\n3]Boot space: 328 litres\n4]Ex-Showroom Price in Delhi: Rs 7.99 to Rs 13.96 Lakh\n5]Seating Capacity: 5\n6]Maximum Power: 103 bhp\n7]Peak Torque: 138 Nm\n8]Transmission Type: Manual and Automatic");
+            break;
+            case 2:
+            printf("Specifications are:-\n1]Mileage: 17.0 to 20.0 kmpl\n2]Engine Displacement: 1497 cc Diesel, 1197 cc Petrol\n3]Boot Space: 259 litres\n4]Seating Capacity: 5\n4]Ex-Showroom Price in Delhi: Rs 8.3 lakh to Rs 12.69 lakh\n6]Maximum Power: 85.8 kW power- Diesel, 81 kW power- Petrol\n7]Peak Torque: 300 Nm torque- Diesel, 200 Nm torque- Petrol\n8]Transmission Type: Manual and Automatic");
+            break;
+            case 3:
+            printf("Specifications are:-\n1]Mileage: 16.3 to 22 kmpl\n2]Engine Displacement: 1497 cc Diesel, 1199 cc Petrol\n3]Boot Space: 350 litres\n4]Seating Capacity: 5\n5]Ex-Showroom Price in Delhi: Rs 8.6 lakh to Rs 16.65 lakh\n6]Maximum Power: 118 bhp@5500 rpm- Petrol, 108 bhp@4000 rpm- Diesel\n7]Peak Torque: 170 Nm@1750 rpm- Petrol, 260 Nm@1500 rpm-Diesel\n8]Transmission Type: Manual and Automatic");
+            break;
+        }
+        break;
+    }
+    printf("\nDo you want to purchase (1-yes/0-no): ");
+    scanf("%d", &response);
+    if(response == 1) {
+        switch(num) {
+            case 1:
+            switch(1) {
+                case 1:
+                printf("Down payment-0\nAvailable:\nEMI Time period- 5year\nEMI Rate of interest- 9.8%\nEMI per month-Rs21,84,350 per month\nLoan amount of Rs Rs.10,32,84,983");
+                break;
+                case 2:
+                printf("Down payment-0\nAvailable:\nEMI Time period- 5year\nEMI Rate of interest- 9.8%\nEMI per month-Rs16,88,820 per month\nLoan amount of Rs. Rs.7,98,54,310.");
+                break;
+                case 3:
+                printf("Down payment-0\nAvailable:\nEMI Time period- 5year\nEMI Rate of interest- 9.8%\nEMI per month-Rs1,90,049 per month\nLoan amount of- Rs.89,86,297.");
+                break;
+            }
+            break;
+            case 2:
+            switch(2) {
+                case 1:
+                printf("Down payment-0\nAvailable:\nEMI Time period- 5year\nEMI Rate of interest- 9.8%\nEMI per month-Rs13,020 per month\nLoan amount of- Rs.6,15,656.");
+                break;
+                case 2:
+                printf("Down payment-0\nAvailable:\nEMI Time period- 5year\nEMI Rate of interest- 9.8%\nEMI per month-Rs36,042 per month\nLoan amount of- Rs.17,04,217.");
+                break;
+                case 3:
+                printf("Down payment-0\nAvailable:\nEMI Time period- 5year\nEMI Rate of interest- 9.8%\nEMI per month-Rs17,792 per month\nLoan amount of- Rs.8,41,281.");
+                break;
+            }
+            break;
+            case 3:
+            switch(3) {
+                case 1:
+                printf("Down payment-0\nAvailable:\nEMI Time period- 5year\nEMI Rate of interest- 9.8%\nEMI per month-Rs19,726 per month\nLoan amount of- Rs.9,32,728.");
+                break;
+                case 2:
+                printf("Down payment-0\nAvailable:\nEMI Time period- 5year\nEMI Rate of interest- 9.8%\nEMI per month-Rs23,271 per month\nLoan amount of- Rs.11,00,366.");
+                break;
+                case 3:
+                printf("Down payment-0\nAvailable:\nEMI Time period- 5year\nEMI Rate of interest- 9.8%\nEMI per month-Rs27,510 per month\nLoan amount of- Rs.13,00,792.");
+                break;
+            }
+            break;
+        }
+    }
+    }
+    else if(res == 2) {
+        exit;
+    }
+    else {
+        printf("Invalid Entey.");
+        goto start;
+    }
+    return 0;
+}
